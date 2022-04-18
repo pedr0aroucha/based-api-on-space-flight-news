@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  featured    Boolean  @default(false)
+  title       String   @unique
+  url         String
+  imageUrl    String
+  newsSite    String
+  summary     String   @db.LongText
+  publishedAt DateTime
+
+  launches ArticleOnLaunch[]
+  events   ArticleOnEvent[]
+}
+
+model Launch {
+  id       String @id @default(uuid())
+  provider String
+
+  articles ArticleOnLaunch[]
+
+}
+
+model ArticleOnLaunch {
+  articles  Article @relation(fields: [articleId], references: [id])
+  articleId Int
+
+  launches Launch @relation(fields: [launchId], references: [id])
+  launchId String
+
+  @@id([articleId, launchId])
+}
+
+model Event {
+  id       Int    @id @default(autoincrement())
+  provider String
+
+  articles ArticleOnEvent[]
+}
+
+model ArticleOnEvent {
+  articles  Article @relation(fields: [articleId], references: [id])
+  articleId Int
+
+  events  Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+
+  @@id([articleId, eventId])
+}
