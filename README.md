@@ -25,5 +25,3 @@ Veja como instalar o docker compose em https://docs.docker.com/compose/install
 # No seu terminal execute o comando abaixo
 docker-compose up -d --build
 ```
-
-challenge by coodesh
